@@ -1,0 +1,63 @@
+## Tapso Progress Log
+
+---
+
+### Iteration 1 — 2026-05-26
+**Status**: Initial audit + PRD creation + Scroll-Reveal Animations
+
+**Completed**:
+- Audited full project: index.html, app.js (1372 lines), style.css (2025 lines), data.js (551 lines)
+- Created PRD.md with complete feature inventory and enhancement backlog
+- Landing page has 12 sections, all rendering correctly via data-driven JS injection
+- Three.js network background, interactive bento widgets (OCR, RTO, chat, domain, languages), storefront customizer, workflow timeline slider, analytics chart tabs — all implemented
+
+**Task Executed**:
+- IMPLEMENT: Scroll-triggered reveal animations for all major sections and cards
+  - Added `.reveal` CSS class with opacity/transform transitions (0.65s cubic-bezier)
+  - Added stagger delay classes (.reveal-delay-1 through .reveal-delay-6) for grid items
+  - Added `setupScrollReveal()` function in app.js using IntersectionObserver API
+  - Targets: section-header, feature cards, problem cards, testimonial cards, pricing cards, timeline buttons, analytics cards, footer
+  - Grid items auto-stagger with incremental delay (features-grid, testimonials-grid, pricing-grid, timeline-steps)
+  - IntersectionObserver fallback (shows all immediately if not supported)
+  - Added animate-once behavior (unobserve after first visibility)
+
+- IMPLEMENT: Mobile hamburger menu for < 768px viewports
+  - Added hamburger button to navbar HTML (3 bars → X animation on open)
+  - `setupMobileMenu()` dynamically creates fullscreen overlay menu
+  - All navbar links + CTA buttons included in mobile menu
+  - Closes on: link click, CTA click, Escape key press, body scroll restore
+  - ARIA attributes: aria-expanded, aria-hidden for accessibility
+  - CSS: `@media (max-width: 768px)` hides desktop menu, shows hamburger
+
+- IMPLEMENT: Scroll progress bar (top of page)
+  - Thin 2px gradient bar (cyan → pink) tracking scroll depth
+  - `injectScrollProgressDOM()` creates DOM element dynamically
+  - `setupScrollProgressBar()` handles scroll event updates (passive listener)
+
+- IMPLEMENT: Navbar scroll spy (active section highlighting)
+  - `setupScrollSpy()` uses IntersectionObserver with threshold: 0.35
+  - Active state synced to both desktop and mobile nav links
+  - Works for all 6 main sections: features, storefront, workflow, analytics, testimonials, pricing
+
+**Outcome**: ✅ SUCCESS — All 4 features implemented, app.js syntax validated clean
+
+---
+
+### Iteration 2 — 2026-05-26
+**Status**: Stats Count-up + Hero Parallax + Storefront Mobile fixes + ThreeJS Loader
+
+**Completed**:
+- Implemented IntersectionObserver-based counter animation `setupStatsCounter()` in app.js.
+  - Dynamically injects count-up spans in `renderHero()` and `renderAnalytics()`.
+  - Supports Indian currency format (rupee), commas, and decimals.
+- Added smooth 3D scroll-based camera and node parallax to Three.js canvas in `initThreeJsNetwork()`.
+- Fixed mobile-responsiveness of the phone mockup customizer inside style.css using scale CSS transformations on small screens.
+- Added a glassmorphic initialization loading skeleton spinner in index.html and style.css, fading out gracefully when Three.js begins rendering.
+- Added premium CSS styling for the storefront live demo link under the final CTA section.
+
+**Outcome**: ✅ SUCCESS — ESLint checks and Vite production build completed successfully with zero compile errors.
+
+**Next Step**: Implement P4 — Add toast notification when claim store button is clicked (replace alert() calls).
+
+---
+

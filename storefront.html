@@ -1,0 +1,1409 @@
+<!DOCTYPE html>
+<html lang="hi" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chota Sahukaar | Tapso Store</title>
+  <meta name="description" content="Chota Sahukaar ka Tapso store — Premium Kirana, Dry Fruits, Indian Spices & Home Essentials. WhatsApp orders welcome. UPI payments accepted." />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+
+  <!-- Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    /* =============================================
+       DESIGN TOKENS
+    ============================================= */
+    :root {
+      --bg:       #051424;
+      --bg-2:     #082038;
+      --bg-3:     #0c2d4e;
+      --text:     #d4e4fa;
+      --muted:    #7c9cb8;
+      --accent:   #4cd6ff;
+      --pink:     #ec4899;
+      --green:    #25D366;
+      --success:  #10b981;
+      --warning:  #f59e0b;
+      --border:   rgba(76,214,255,0.1);
+      --glass:    rgba(8,32,56,0.5);
+      --blur:     blur(16px);
+      --f-display: 'Outfit', sans-serif;
+      --f-sans:    'Inter', sans-serif;
+      --f-mono:    'Space Mono', monospace;
+      --ease:      cubic-bezier(0.22,1,0.36,1);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--f-sans);
+      line-height: 1.6;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    img { max-width: 100%; display: block; }
+
+    /* =============================================
+       SCROLLBAR
+    ============================================= */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
+
+    /* =============================================
+       SCROLL PROGRESS BAR
+    ============================================= */
+    #progress-bar {
+      position: fixed;
+      top: 0; left: 0;
+      width: 0%;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent), var(--pink));
+      z-index: 9999;
+      transition: width 0.1s linear;
+      box-shadow: 0 0 8px rgba(76,214,255,0.5);
+    }
+
+    /* =============================================
+       NAVBAR
+    ============================================= */
+    .nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      z-index: 100;
+      transition: all 0.3s var(--ease);
+    }
+    .nav.scrolled {
+      background: rgba(5,20,36,0.9);
+      backdrop-filter: var(--blur);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--f-display);
+      font-weight: 700;
+      font-size: 18px;
+      color: #fff;
+    }
+    .nav-brand .badge {
+      font-family: var(--f-mono);
+      font-size: 9px;
+      color: var(--accent);
+      background: rgba(76,214,255,0.1);
+      border: 1px solid rgba(76,214,255,0.2);
+      padding: 2px 6px;
+      border-radius: 100px;
+    }
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .btn-wa {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 14px;
+      background: rgba(37,211,102,0.15);
+      border: 1px solid rgba(37,211,102,0.3);
+      border-radius: 8px;
+      color: var(--green);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-wa:hover { background: rgba(37,211,102,0.25); transform: translateY(-1px); }
+    .btn-share {
+      width: 36px; height: 36px;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+      color: var(--muted);
+    }
+    .btn-share:hover { color: #fff; border-color: rgba(255,255,255,0.2); }
+
+    /* =============================================
+       HERO / PROFILE HEADER
+    ============================================= */
+    .profile-section {
+      padding: 96px 20px 32px;
+      text-align: center;
+      position: relative;
+    }
+    .profile-section::before {
+      content: '';
+      position: absolute;
+      top: 60px; left: 50%; transform: translateX(-50%);
+      width: 400px; height: 300px;
+      background: radial-gradient(ellipse, rgba(76,214,255,0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .avatar-wrap {
+      position: relative;
+      display: inline-block;
+      margin-bottom: 20px;
+    }
+    .avatar-ring {
+      width: 100px; height: 100px;
+      border-radius: 50%;
+      padding: 2px;
+      background: linear-gradient(135deg, var(--accent), #5f259f);
+      display: inline-block;
+    }
+    .avatar-img {
+      width: 100%; height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid var(--bg);
+    }
+    .verified-dot {
+      position: absolute;
+      bottom: 4px; right: 4px;
+      width: 22px; height: 22px;
+      background: var(--accent);
+      border: 2px solid var(--bg);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      animation: pulse-dot 2s ease infinite;
+    }
+    @keyframes pulse-dot {
+      0%,100% { box-shadow: 0 0 5px var(--accent); }
+      50%      { box-shadow: 0 0 15px var(--accent); }
+    }
+    .profile-name {
+      font-family: var(--f-display);
+      font-size: 28px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+    .profile-handle {
+      font-family: var(--f-mono);
+      font-size: 12px;
+      color: var(--accent);
+      letter-spacing: 0.1em;
+      margin-bottom: 10px;
+    }
+    .profile-bio {
+      max-width: 360px;
+      margin: 0 auto 20px;
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+    .profile-stats {
+      display: flex;
+      justify-content: center;
+      gap: 32px;
+      margin-bottom: 24px;
+    }
+    .stat-item { text-align: center; }
+    .stat-val {
+      font-family: var(--f-display);
+      font-size: 20px;
+      font-weight: 700;
+      color: #fff;
+    }
+    .stat-label {
+      font-size: 10px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+    .stat-divider {
+      width: 1px;
+      background: rgba(255,255,255,0.08);
+      align-self: stretch;
+    }
+    .action-row {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .action-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 10px 18px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.25s;
+      border: 1px solid;
+    }
+    .action-btn.wa {
+      background: rgba(37,211,102,0.12);
+      border-color: rgba(37,211,102,0.3);
+      color: var(--green);
+    }
+    .action-btn.wa:hover { background: rgba(37,211,102,0.2); transform: translateY(-2px); }
+    .action-btn.upi {
+      background: rgba(76,214,255,0.1);
+      border-color: rgba(76,214,255,0.25);
+      color: var(--accent);
+    }
+    .action-btn.upi:hover { background: rgba(76,214,255,0.18); transform: translateY(-2px); }
+    .action-btn.ig {
+      background: rgba(236,72,153,0.1);
+      border-color: rgba(236,72,153,0.25);
+      color: var(--pink);
+    }
+    .action-btn.ig:hover { background: rgba(236,72,153,0.18); transform: translateY(-2px); }
+
+    /* =============================================
+       STORIES / HIGHLIGHTS
+    ============================================= */
+    .stories-section {
+      padding: 8px 0 20px;
+      overflow: hidden;
+    }
+    .stories-scroll {
+      display: flex;
+      gap: 16px;
+      overflow-x: auto;
+      padding: 4px 20px 8px;
+      scrollbar-width: none;
+    }
+    .stories-scroll::-webkit-scrollbar { display: none; }
+    .story-item {
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+    }
+    .story-ring {
+      width: 60px; height: 60px;
+      border-radius: 50%;
+      padding: 2px;
+      background: linear-gradient(135deg, var(--accent), var(--pink));
+    }
+    .story-ring.inactive {
+      background: rgba(255,255,255,0.1);
+    }
+    .story-inner {
+      width: 100%; height: 100%;
+      border-radius: 50%;
+      border: 2px solid var(--bg);
+      overflow: hidden;
+      background: var(--bg-3);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .story-emoji {
+      font-size: 24px;
+    }
+    .story-label {
+      font-size: 10px;
+      color: var(--muted);
+      text-align: center;
+    }
+    .story-item:hover .story-ring { filter: brightness(1.15); }
+
+    /* =============================================
+       SECTION COMMON
+    ============================================= */
+    .section {
+      padding: 24px 20px;
+    }
+    .section-title {
+      font-family: var(--f-display);
+      font-size: 18px;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .section-title .see-all {
+      font-size: 12px;
+      color: var(--accent);
+      font-weight: 500;
+      cursor: pointer;
+    }
+    .live-dot {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-family: var(--f-mono);
+      font-size: 10px;
+      color: var(--success);
+    }
+    .live-dot::before {
+      content: '';
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--success);
+      box-shadow: 0 0 6px var(--success);
+      animation: blink 1.5s ease infinite;
+    }
+    @keyframes blink {
+      0%,100% { opacity: 1; }
+      50%      { opacity: 0.3; }
+    }
+
+    /* Glass card */
+    .glass {
+      background: var(--glass);
+      backdrop-filter: var(--blur);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      transition: all 0.25s var(--ease);
+    }
+    .glass:hover {
+      border-color: rgba(76,214,255,0.2);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.4), 0 0 30px rgba(76,214,255,0.04);
+      transform: translateY(-2px);
+    }
+
+    /* =============================================
+       FEATURED PRODUCT CARD (BIG)
+    ============================================= */
+    .featured-card {
+      border-radius: 20px;
+      overflow: hidden;
+      margin-bottom: 16px;
+      cursor: pointer;
+      position: relative;
+    }
+    .featured-img {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      transition: transform 0.5s var(--ease);
+    }
+    .featured-card:hover .featured-img { transform: scale(1.04); }
+    .featured-img-wrap { overflow: hidden; position: relative; }
+    .featured-tag {
+      position: absolute;
+      top: 12px; right: 12px;
+      background: var(--accent);
+      color: var(--bg);
+      font-family: var(--f-mono);
+      font-size: 9px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 100px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      animation: pulse-dot 2s ease infinite;
+    }
+    .featured-body {
+      padding: 16px;
+    }
+    .featured-name {
+      font-family: var(--f-display);
+      font-size: 18px;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+    .featured-desc {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 14px;
+    }
+    .featured-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .price {
+      font-family: var(--f-display);
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--accent);
+    }
+    .price-old {
+      font-size: 12px;
+      color: var(--muted);
+      text-decoration: line-through;
+      margin-left: 6px;
+    }
+    .btn-buy {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 10px 18px;
+      background: var(--accent);
+      color: var(--bg);
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s;
+    }
+    .btn-buy:hover { background: #fff; transform: translateY(-1px); box-shadow: 0 4px 16px rgba(76,214,255,0.3); }
+
+    /* =============================================
+       PRODUCT GRID
+    ============================================= */
+    .products-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .product-card {
+      border-radius: 14px;
+      overflow: hidden;
+      cursor: pointer;
+      position: relative;
+    }
+    .product-img-wrap {
+      overflow: hidden;
+      aspect-ratio: 1;
+    }
+    .product-img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform 0.4s var(--ease);
+    }
+    .product-card:hover .product-img { transform: scale(1.06); }
+    .product-body {
+      padding: 10px 12px 12px;
+    }
+    .product-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .product-unit {
+      font-size: 10px;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+    .product-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .product-price {
+      font-family: var(--f-display);
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--accent);
+    }
+    .product-mrp {
+      font-size: 10px;
+      color: var(--muted);
+      text-decoration: line-through;
+    }
+    .btn-cart {
+      width: 30px; height: 30px;
+      border-radius: 8px;
+      background: rgba(76,214,255,0.1);
+      border: 1px solid rgba(76,214,255,0.2);
+      color: var(--accent);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-cart:hover { background: var(--accent); color: var(--bg); }
+
+    /* =============================================
+       CATEGORIES ROW
+    ============================================= */
+    .categories-scroll {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+      scrollbar-width: none;
+    }
+    .categories-scroll::-webkit-scrollbar { display: none; }
+    .cat-pill {
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 14px;
+      border-radius: 100px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.03);
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+    .cat-pill.active, .cat-pill:hover {
+      background: rgba(76,214,255,0.1);
+      border-color: rgba(76,214,255,0.3);
+      color: var(--accent);
+    }
+
+    /* =============================================
+       TRUST / PAYMENT BANNER
+    ============================================= */
+    .trust-banner {
+      margin: 8px 0;
+      padding: 16px;
+      border-radius: 14px;
+      background: rgba(16,185,129,0.06);
+      border: 1px solid rgba(16,185,129,0.15);
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .trust-icon {
+      width: 44px; height: 44px;
+      border-radius: 12px;
+      background: rgba(16,185,129,0.1);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--success);
+      flex-shrink: 0;
+    }
+    .trust-text .title {
+      font-size: 13px;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 2px;
+    }
+    .trust-text .sub {
+      font-size: 11px;
+      color: var(--muted);
+    }
+    .upi-logos {
+      display: flex;
+      gap: 6px;
+      margin-top: 8px;
+    }
+    .upi-pill {
+      font-family: var(--f-mono);
+      font-size: 9px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 4px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+    .upi-pill.phonePe { color: #b080ff; border-color: rgba(95,37,159,0.3); }
+    .upi-pill.gpay    { color: #4cd6ff; border-color: rgba(76,214,255,0.2); }
+    .upi-pill.paytm   { color: #00baf2; border-color: rgba(0,186,242,0.2); }
+
+    /* =============================================
+       OFFER BANNER
+    ============================================= */
+    .offer-banner {
+      padding: 16px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, rgba(236,72,153,0.12), rgba(76,214,255,0.08));
+      border: 1px solid rgba(236,72,153,0.2);
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .offer-icon {
+      font-size: 32px;
+      flex-shrink: 0;
+    }
+    .offer-text .title {
+      font-family: var(--f-display);
+      font-size: 15px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 2px;
+    }
+    .offer-text .sub {
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .offer-code {
+      margin-left: auto;
+      font-family: var(--f-mono);
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--pink);
+      background: rgba(236,72,153,0.1);
+      border: 1px dashed rgba(236,72,153,0.3);
+      padding: 6px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+      flex-shrink: 0;
+    }
+    .offer-code:hover { background: rgba(236,72,153,0.2); }
+
+    /* =============================================
+       REVIEWS
+    ============================================= */
+    .reviews-scroll {
+      display: flex;
+      gap: 12px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+      scrollbar-width: none;
+    }
+    .reviews-scroll::-webkit-scrollbar { display: none; }
+    .review-card {
+      flex-shrink: 0;
+      width: 240px;
+      padding: 16px;
+      border-radius: 14px;
+    }
+    .review-stars {
+      color: var(--warning);
+      font-size: 13px;
+      margin-bottom: 8px;
+    }
+    .review-text {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 12px;
+      line-height: 1.5;
+    }
+    .reviewer {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .reviewer-avatar {
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      background: var(--bg-3);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px;
+    }
+    .reviewer-name {
+      font-size: 12px;
+      font-weight: 600;
+      color: #fff;
+    }
+    .reviewer-meta {
+      font-size: 10px;
+      color: var(--muted);
+    }
+
+    /* =============================================
+       CONTACT / HOURS
+    ============================================= */
+    .info-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .info-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px;
+      border-radius: 12px;
+    }
+    .info-icon {
+      width: 38px; height: 38px;
+      border-radius: 10px;
+      background: rgba(76,214,255,0.08);
+      border: 1px solid rgba(76,214,255,0.15);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--accent);
+      flex-shrink: 0;
+    }
+    .info-content .label {
+      font-size: 11px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .info-content .value {
+      font-size: 14px;
+      font-weight: 600;
+      color: #fff;
+      margin-top: 1px;
+    }
+
+    /* =============================================
+       BOTTOM NAV (mobile-only fixed)
+    ============================================= */
+    .bottom-nav {
+      position: fixed;
+      bottom: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: calc(100% - 32px);
+      max-width: 400px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      background: rgba(8,32,56,0.92);
+      backdrop-filter: var(--blur);
+      border: 1px solid rgba(76,214,255,0.15);
+      border-radius: 20px;
+      z-index: 90;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.5), 0 0 20px rgba(76,214,255,0.05);
+    }
+    .bnav-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      cursor: pointer;
+      color: var(--muted);
+      transition: color 0.2s;
+      flex: 1;
+    }
+    .bnav-btn.active { color: var(--accent); }
+    .bnav-btn:hover { color: var(--text); }
+    .bnav-label {
+      font-size: 9px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* =============================================
+       TAPSO BRANDING FOOTER
+    ============================================= */
+    .tapso-footer {
+      padding: 24px 20px 96px;
+      text-align: center;
+    }
+    .tapso-footer .powered {
+      font-size: 11px;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+    .tapso-footer .link {
+      font-family: var(--f-mono);
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: 0.05em;
+    }
+    .tapso-footer .link span { opacity: 0.5; color: var(--muted); font-weight: 400; }
+
+    /* =============================================
+       REVEAL ANIMATIONS
+    ============================================= */
+    .reveal {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.5s var(--ease), transform 0.5s var(--ease);
+    }
+    .reveal.visible { opacity: 1; transform: none; }
+    .reveal-delay-1 { transition-delay: 0.06s; }
+    .reveal-delay-2 { transition-delay: 0.12s; }
+    .reveal-delay-3 { transition-delay: 0.18s; }
+    .reveal-delay-4 { transition-delay: 0.24s; }
+
+    /* =============================================
+       TOAST
+    ============================================= */
+    #toast {
+      position: fixed;
+      bottom: 90px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: rgba(16,185,129,0.15);
+      border: 1px solid rgba(16,185,129,0.3);
+      color: var(--success);
+      padding: 12px 20px;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 600;
+      backdrop-filter: var(--blur);
+      z-index: 1000;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.35s var(--ease);
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    #toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* =============================================
+       MAX WIDTH CONTAINER
+    ============================================= */
+    .page-wrap {
+      max-width: 480px;
+      margin: 0 auto;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Scroll progress bar -->
+<div id="progress-bar"></div>
+
+<!-- Toast notification -->
+<div id="toast">
+  <i data-lucide="check-circle" style="width:16px;height:16px;"></i>
+  <span id="toast-msg">Added to WhatsApp cart!</span>
+</div>
+
+<!-- ===== NAVBAR ===== -->
+<nav class="nav" id="navbar">
+  <div class="nav-brand">
+    <i data-lucide="layers" style="width:18px;height:18px;color:var(--accent);"></i>
+    Tapso
+    <span class="badge">STORE</span>
+  </div>
+  <div class="nav-actions">
+    <button class="btn-wa" id="btn-wa-top" aria-label="Chat on WhatsApp">
+      <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+      WhatsApp
+    </button>
+    <button class="btn-share" id="btn-share" aria-label="Share store">
+      <i data-lucide="share-2" style="width:15px;height:15px;"></i>
+    </button>
+  </div>
+</nav>
+
+<!-- ===== PAGE WRAPPER ===== -->
+<div class="page-wrap">
+
+  <!-- ===== PROFILE HEADER ===== -->
+  <section class="profile-section">
+    <div class="avatar-wrap">
+      <div class="avatar-ring">
+        <img
+          src="https://lh3.googleusercontent.com/aida-public/AB6AXuDuwiZtoZJ34yVHOm7hCfeaseho3xqVRJd9ozTGnjG3_taRPsiq6FdrKOrBw7hzohSTXCDFjAqi98kkpfFlo1E8xEA8OLWOxrs1tym9Tr9Ij-2_zQ3qrvL79jS0VSAFNrMNUfQkZwm2qDt2lmU_TmUFyh_T7nsbztaXPOHYEo2xvvaGr-mDX3v4qnZkcaamH1vdmAuuDeMBRsLXcT85iX1sXErtAPkdeDRbP321kRJrwuS2YG5M2JTJ7W9A2uWh-csO0ohkI31FbHC9"
+          alt="Chota Sahukaar"
+          class="avatar-img"
+        />
+      </div>
+      <div class="verified-dot">
+        <i data-lucide="check" style="width:11px;height:11px;color:var(--bg);"></i>
+      </div>
+    </div>
+
+    <h1 class="profile-name">Chota Sahukaar 🛒</h1>
+    <div class="profile-handle">tapso.in/chotasahukaar</div>
+    <p class="profile-bio">
+      Aapka bharosemand kirana dukaan — Premium dry fruits, homemade achaar, organic masale aur ghar ki zaroorat ki cheezein. 
+      WhatsApp pe order karo, UPI se pay karo! 🌶️
+    </p>
+
+    <div class="profile-stats">
+      <div class="stat-item">
+        <div class="stat-val">1.2k+</div>
+        <div class="stat-label">Customers</div>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item">
+        <div class="stat-val">48</div>
+        <div class="stat-label">Products</div>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item">
+        <div class="stat-val">4.9 ⭐</div>
+        <div class="stat-label">Rating</div>
+      </div>
+    </div>
+
+    <div class="action-row">
+      <button class="action-btn wa" onclick="handleWhatsApp()">
+        <i data-lucide="message-circle" style="width:15px;height:15px;"></i>
+        WhatsApp Order
+      </button>
+      <button class="action-btn upi" onclick="handleUPI()">
+        <i data-lucide="wallet" style="width:15px;height:15px;"></i>
+        Direct UPI
+      </button>
+      <button class="action-btn ig" onclick="handleInstagram()">
+        <i data-lucide="instagram" style="width:15px;height:15px;"></i>
+        Follow
+      </button>
+    </div>
+  </section>
+
+  <!-- ===== STORIES / HIGHLIGHTS ===== -->
+  <section class="stories-section">
+    <div class="stories-scroll">
+      <div class="story-item">
+        <div class="story-ring">
+          <div class="story-inner">
+            <span class="story-emoji">🥜</span>
+          </div>
+        </div>
+        <span class="story-label">Dry Fruits</span>
+      </div>
+      <div class="story-item">
+        <div class="story-ring">
+          <div class="story-inner">
+            <span class="story-emoji">🌶️</span>
+          </div>
+        </div>
+        <span class="story-label">Masale</span>
+      </div>
+      <div class="story-item">
+        <div class="story-ring">
+          <div class="story-inner">
+            <span class="story-emoji">🫙</span>
+          </div>
+        </div>
+        <span class="story-label">Achaar</span>
+      </div>
+      <div class="story-item">
+        <div class="story-ring inactive">
+          <div class="story-inner">
+            <span class="story-emoji">🍯</span>
+          </div>
+        </div>
+        <span class="story-label">Honey</span>
+      </div>
+      <div class="story-item">
+        <div class="story-ring inactive">
+          <div class="story-inner">
+            <span class="story-emoji">🌾</span>
+          </div>
+        </div>
+        <span class="story-label">Grains</span>
+      </div>
+      <div class="story-item">
+        <div class="story-ring inactive">
+          <div class="story-inner">
+            <span class="story-emoji">🧂</span>
+          </div>
+        </div>
+        <span class="story-label">Namak</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== OFFER BANNER ===== -->
+  <section class="section reveal">
+    <div class="offer-banner">
+      <div class="offer-icon">🎁</div>
+      <div class="offer-text">
+        <div class="title">Pehli Order Pe 10% OFF</div>
+        <div class="sub">Minimum order ₹299 • Free delivery above ₹499</div>
+      </div>
+      <div class="offer-code" onclick="copyCode()">NAYA10</div>
+    </div>
+  </section>
+
+  <!-- ===== CATEGORIES ===== -->
+  <section class="section reveal reveal-delay-1">
+    <div class="categories-scroll" id="cat-scroll">
+      <div class="cat-pill active" data-cat="all">🛒 Sab kuch</div>
+      <div class="cat-pill" data-cat="dryfruits">🥜 Dry Fruits</div>
+      <div class="cat-pill" data-cat="spices">🌶️ Masale</div>
+      <div class="cat-pill" data-cat="achaar">🫙 Achaar & Chutney</div>
+      <div class="cat-pill" data-cat="grains">🌾 Dals & Grains</div>
+      <div class="cat-pill" data-cat="honey">🍯 Honey & Jam</div>
+    </div>
+  </section>
+
+  <!-- ===== FEATURED PRODUCT ===== -->
+  <section class="section reveal">
+    <div class="section-title">
+      <span>⭐ Featured Drop <span class="live-dot" style="margin-left:8px;">LIVE</span></span>
+      <span class="see-all">See All →</span>
+    </div>
+    <div class="glass featured-card">
+      <div class="featured-img-wrap">
+        <img
+          src="https://lh3.googleusercontent.com/aida-public/AB6AXuBshR9My9iAebUs-n_Unyw-gVzeJrCkwtW0BWTH88VgKvhrw5PdXjFbjqJBVPE5U-MSQvQEuOVsagJnmbT213d0TaRKscWmUpj0_YO5wa_vvOboiQHrE5c9KjHM7emLtFbNlNKhV-JW0HZKE4RDIb9-8rLIaRJWfMO08dd1DYDztNjUZvzo4_SWpGZLh8aNLiWWm8wfOgAdDnCs_KUDLu4VXcFMvucg7IppETxEOMBs19ZAT9vIxuENVrdMCdWgyjhX7uopb_1yuXMT"
+          alt="Kashmir Walnuts Premium"
+          class="featured-img"
+        />
+        <div class="featured-tag">🌟 Bestseller</div>
+      </div>
+      <div class="featured-body">
+        <div class="featured-name">Premium Kashmir Walnuts (Akhrot)</div>
+        <div class="featured-desc">Directly sourced from Kashmir valley — full walnuts, rich in omega-3, perfect for daily snacking. 500g pack.</div>
+        <div class="featured-footer">
+          <div>
+            <span class="price">₹349</span>
+            <span class="price-old">₹499</span>
+            <div style="font-size:10px;color:var(--success);margin-top:2px;">30% OFF today only</div>
+          </div>
+          <button class="btn-buy" onclick="addToCart('Kashmir Walnuts', 349)">
+            <i data-lucide="shopping-cart" style="width:14px;height:14px;"></i>
+            Buy Now
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== TRUST BANNER ===== -->
+  <section class="section reveal">
+    <div class="trust-banner">
+      <div class="trust-icon">
+        <i data-lucide="shield-check" style="width:20px;height:20px;"></i>
+      </div>
+      <div class="trust-text">
+        <div class="title">Verified UPI Payments</div>
+        <div class="sub">Tapso-verified instant payments</div>
+        <div class="upi-logos">
+          <span class="upi-pill phonePe">PhonePe</span>
+          <span class="upi-pill gpay">GPay</span>
+          <span class="upi-pill paytm">Paytm</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== PRODUCT GRID ===== -->
+  <section class="section reveal">
+    <div class="section-title">
+      <span>🛒 Hmare Products</span>
+      <span class="see-all">Filter ↓</span>
+    </div>
+    <div class="products-grid" id="products-grid">
+
+      <div class="glass product-card reveal reveal-delay-1">
+        <div class="product-img-wrap">
+          <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuChFusUSJu_-aXYK4TPTFJDs-d3H-UrAmNBR1aPB99IwqN3VrsIaO5DF_D4ILBwdL9cxKvMoz0ry168XfFdh6yPdjtLnaYoH3mMbrFpkv5qqMw2uA8vqkSuOpBnHGa1OlYJTxpgbHMT3CrzCwNNfF8Zbw2rzqbYhUBlOiazAlHPmkc766MP72PUWNSAaWVmTVgWknGR-LgQANEoLvm8DtZzULkIFN1cGbYPPu1psRsueIa9Epn_dsW7fKo_9QxpU1g1mlH3QihAyEty" alt="Badam" class="product-img" />
+        </div>
+        <div class="product-body">
+          <div class="product-name">Mamra Badam</div>
+          <div class="product-unit">250g | California variety</div>
+          <div class="product-footer">
+            <div>
+              <div class="product-price">₹299</div>
+              <div class="product-mrp">₹399</div>
+            </div>
+            <button class="btn-cart" onclick="addToCart('Mamra Badam', 299)">
+              <i data-lucide="plus" style="width:14px;height:14px;"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="glass product-card reveal reveal-delay-2">
+        <div class="product-img-wrap">
+          <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuArU0f6J4MLFGfesy32DgeZGDk1AeNZn32U3P4QfBJG0RRCQa7fhk3A015qm4qbC-C_IEk8UjuS21JARfs_1zpExc_GcYR1I-ZkyzJve-tMsPy0FLKSoZ1B-YF2sXP2k01QKv3MhELAHtJuf-D7TybyFTkaPlLW_SEcyXhhDf3AQRXMt4pppaYD9pRrRI05gUwdd5EZrTjxhAkaLx2biIB57jpKzH5qF2BiViXfPACCBsrvu1H2bVdWle0rSU1kRNBhNZLoCfMR0e7l" alt="Kaju" class="product-img" />
+        </div>
+        <div class="product-body">
+          <div class="product-name">Premium Kaju (W320)</div>
+          <div class="product-unit">250g | Whole cashews</div>
+          <div class="product-footer">
+            <div>
+              <div class="product-price">₹389</div>
+              <div class="product-mrp">₹499</div>
+            </div>
+            <button class="btn-cart" onclick="addToCart('Kaju W320', 389)">
+              <i data-lucide="plus" style="width:14px;height:14px;"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="glass product-card reveal reveal-delay-3">
+        <div class="product-img-wrap">
+          <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuBshR9My9iAebUs-n_Unyw-gVzeJrCkwtW0BWTH88VgKvhrw5PdXjFbjqJBVPE5U-MSQvQEuOVsagJnmbT213d0TaRKscWmUpj0_YO5wa_vvOboiQHrE5c9KjHM7emLtFbNlNKhV-JW0HZKE4RDIb9-8rLIaRJWfMO08dd1DYDztNjUZvzo4_SWpGZLh8aNLiWWm8wfOgAdDnCs_KUDLu4VXcFMvucg7IppETxEOMBs19ZAT9vIxuENVrdMCdWgyjhX7uopb_1yuXMT" alt="Kishmish" class="product-img" />
+        </div>
+        <div class="product-body">
+          <div class="product-name">Golden Kishmish</div>
+          <div class="product-unit">500g | Afghan raisins</div>
+          <div class="product-footer">
+            <div>
+              <div class="product-price">₹199</div>
+              <div class="product-mrp">₹249</div>
+            </div>
+            <button class="btn-cart" onclick="addToCart('Golden Kishmish', 199)">
+              <i data-lucide="plus" style="width:14px;height:14px;"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="glass product-card reveal reveal-delay-4">
+        <div class="product-img-wrap">
+          <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuAeZcPy-6iem904fEm5Q15aPTTSKq72aFeBGwze_ai8p2EHq3-zvF7YwbuaEFl6PIpQbQwb2Ws3FXUopTfEyGdc01CBz5E3G9ixlS1ZaciftzIADxgjjduELGD3XIj32h6IC1URW5kRQFgq4YVPCt1bVOdCLQYPjVRtGzRwUNyiLEN_-4RxgqdJhLShGFTr9yBq8vC_vU7SclmMV1tazQhfBJgkFQaC-CcYUAjZvubfgby76T1xmSgczEyGeO2CQ8ptFc7GvhqzpMQG" alt="Achaar" class="product-img" />
+        </div>
+        <div class="product-body">
+          <div class="product-name">Mango Achaar (Ghar Ka)</div>
+          <div class="product-unit">500g | No preservatives</div>
+          <div class="product-footer">
+            <div>
+              <div class="product-price">₹149</div>
+              <div class="product-mrp">₹199</div>
+            </div>
+            <button class="btn-cart" onclick="addToCart('Mango Achaar', 149)">
+              <i data-lucide="plus" style="width:14px;height:14px;"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===== CUSTOMER REVIEWS ===== -->
+  <section class="section reveal">
+    <div class="section-title">
+      <span>💬 Customer Reviews</span>
+      <span class="see-all">4.9 ⭐ (186)</span>
+    </div>
+    <div class="reviews-scroll">
+      <div class="glass review-card">
+        <div class="review-stars">★★★★★</div>
+        <div class="review-text">"Kaju bilkul fresh tha! WhatsApp pe order kiya aur 2 ghante mein delivery ho gayi. Bahut acha service hai bhai!"</div>
+        <div class="reviewer">
+          <div class="reviewer-avatar">👩</div>
+          <div>
+            <div class="reviewer-name">Priya Sharma</div>
+            <div class="reviewer-meta">Verified buyer • Mumbai</div>
+          </div>
+        </div>
+      </div>
+      <div class="glass review-card">
+        <div class="review-stars">★★★★★</div>
+        <div class="review-text">"Akhrot aur badam dono ekdum authentic Kashmir quality. UPI payment bahut smooth. Phir se zaroor order karunga!"</div>
+        <div class="reviewer">
+          <div class="reviewer-avatar">👨</div>
+          <div>
+            <div class="reviewer-name">Rahul Verma</div>
+            <div class="reviewer-meta">Verified buyer • Delhi NCR</div>
+          </div>
+        </div>
+      </div>
+      <div class="glass review-card">
+        <div class="review-stars">★★★★★</div>
+        <div class="review-text">"Mango achaar toh kamaal ka tha! Bilkul ghar ka taste. Tapso se order karna bahut easy hai, WhatsApp pe baat karke order kiya!"</div>
+        <div class="reviewer">
+          <div class="reviewer-avatar">👩</div>
+          <div>
+            <div class="reviewer-name">Sunita Patel</div>
+            <div class="reviewer-meta">Verified buyer • Surat</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CONTACT & HOURS ===== -->
+  <section class="section reveal">
+    <div class="section-title">📍 Store Info</div>
+    <div class="info-list">
+      <div class="glass info-item">
+        <div class="info-icon">
+          <i data-lucide="map-pin" style="width:18px;height:18px;"></i>
+        </div>
+        <div class="info-content">
+          <div class="label">Location</div>
+          <div class="value">Chandni Chowk, Delhi — Deliver PAN India</div>
+        </div>
+      </div>
+      <div class="glass info-item">
+        <div class="info-icon">
+          <i data-lucide="clock" style="width:18px;height:18px;"></i>
+        </div>
+        <div class="info-content">
+          <div class="label">WhatsApp Order Hours</div>
+          <div class="value">Mon–Sat: 9 AM – 8 PM</div>
+        </div>
+      </div>
+      <div class="glass info-item">
+        <div class="info-icon">
+          <i data-lucide="truck" style="width:18px;height:18px;"></i>
+        </div>
+        <div class="info-content">
+          <div class="label">Delivery</div>
+          <div class="value">Same-day (Delhi) · 2–4 days PAN India</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== TAPSO BRANDING FOOTER ===== -->
+  <div class="tapso-footer">
+    <div class="powered">This store is powered by</div>
+    <div class="link">
+      🌐 tapso.in<span>/chotasahukaar</span>
+    </div>
+    <div style="margin-top:10px;font-size:11px;color:var(--muted);">
+      Create your own store at <a href="../index.html" style="color:var(--accent);">tapso.in</a>
+    </div>
+  </div>
+
+</div>
+<!-- end .page-wrap -->
+
+<!-- ===== BOTTOM NAV ===== -->
+<nav class="bottom-nav" id="bottom-nav">
+  <button class="bnav-btn active" onclick="scrollToTop()">
+    <i data-lucide="store" style="width:20px;height:20px;"></i>
+    <span class="bnav-label">Store</span>
+  </button>
+  <button class="bnav-btn" onclick="handleSearch()">
+    <i data-lucide="search" style="width:20px;height:20px;"></i>
+    <span class="bnav-label">Search</span>
+  </button>
+  <button class="bnav-btn" onclick="handleWhatsApp()" style="color:var(--green);">
+    <i data-lucide="message-circle" style="width:22px;height:22px;"></i>
+    <span class="bnav-label">Order</span>
+  </button>
+  <button class="bnav-btn" onclick="handleShare()">
+    <i data-lucide="share-2" style="width:20px;height:20px;"></i>
+    <span class="bnav-label">Share</span>
+  </button>
+</nav>
+
+<script>
+  // =============================================
+  // INIT LUCIDE ICONS
+  // =============================================
+  document.addEventListener('DOMContentLoaded', () => {
+    if (window.lucide) lucide.createIcons();
+    setupScrollProgress();
+    setupReveal();
+    setupNavScroll();
+    setupCategories();
+  });
+
+  // =============================================
+  // SCROLL PROGRESS
+  // =============================================
+  function setupScrollProgress() {
+    const bar = document.getElementById('progress-bar');
+    window.addEventListener('scroll', () => {
+      const pct = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+      bar.style.width = Math.min(pct, 100) + '%';
+    }, { passive: true });
+  }
+
+  // =============================================
+  // NAV SCROLL
+  // =============================================
+  function setupNavScroll() {
+    const nav = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 20);
+    }, { passive: true });
+  }
+
+  // =============================================
+  // REVEAL ANIMATIONS
+  // =============================================
+  function setupReveal() {
+    const els = document.querySelectorAll('.reveal');
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          obs.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -30px 0px' });
+    els.forEach(el => obs.observe(el));
+  }
+
+  // =============================================
+  // CATEGORIES FILTER
+  // =============================================
+  function setupCategories() {
+    const pills = document.querySelectorAll('.cat-pill');
+    pills.forEach(pill => {
+      pill.addEventListener('click', () => {
+        pills.forEach(p => p.classList.remove('active'));
+        pill.classList.add('active');
+        showToast('Showing: ' + pill.textContent.trim(), 'info');
+      });
+    });
+  }
+
+  // =============================================
+  // TOAST
+  // =============================================
+  let toastTimer;
+  function showToast(msg, type = 'success') {
+    const toast = document.getElementById('toast');
+    document.getElementById('toast-msg').textContent = msg;
+    if (type === 'info') {
+      toast.style.background = 'rgba(76,214,255,0.12)';
+      toast.style.borderColor = 'rgba(76,214,255,0.3)';
+      toast.style.color = 'var(--accent)';
+    } else {
+      toast.style.background = 'rgba(16,185,129,0.12)';
+      toast.style.borderColor = 'rgba(16,185,129,0.3)';
+      toast.style.color = 'var(--success)';
+    }
+    toast.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove('show'), 2800);
+  }
+
+  // =============================================
+  // ACTIONS
+  // =============================================
+  function addToCart(name, price) {
+    showToast(`✓ ${name} (₹${price}) — WhatsApp par bheja!`);
+    // In production: add to cart state + WhatsApp deep link
+  }
+
+  function handleWhatsApp() {
+    const msg = encodeURIComponent('Namaste! Mujhe Tapso store (tapso.in/chotasahukaar) se order karna hai. Kya aap available hain?');
+    window.open(`https://wa.me/919999999999?text=${msg}`, '_blank');
+  }
+
+  function handleUPI() {
+    showToast('UPI: chotasahukaar@ybl — Tapso verified! ✓');
+  }
+
+  function handleInstagram() {
+    showToast('Instagram pe follow karo: @chotasahukaar', 'info');
+  }
+
+  function handleShare() {
+    if (navigator.share) {
+      navigator.share({
+        title: 'Chota Sahukaar | Tapso Store',
+        text: 'Premium Dry Fruits, Masale & Kirana — WhatsApp pe order karo!',
+        url: 'https://tapso.in/chotasahukaar'
+      }).catch(() => {});
+    } else {
+      navigator.clipboard.writeText('https://tapso.in/chotasahukaar')
+        .then(() => showToast('Link copied: tapso.in/chotasahukaar', 'info'));
+    }
+  }
+
+  function handleSearch() {
+    showToast('Search coming soon! WhatsApp pe search karo.', 'info');
+  }
+
+  function copyCode() {
+    navigator.clipboard.writeText('NAYA10')
+      .then(() => showToast('Coupon code NAYA10 copied! ✓'))
+      .catch(() => showToast('Code: NAYA10 — Use at checkout!'));
+  }
+
+  function scrollToTop() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // Share button in nav
+  document.getElementById('btn-share')?.addEventListener('click', handleShare);
+  document.getElementById('btn-wa-top')?.addEventListener('click', handleWhatsApp);
+</script>
+</body>
+</html>
